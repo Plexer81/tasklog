@@ -63,6 +63,7 @@ input, select { font-family: inherit; }
   position: sticky;
   top: 0;
   z-index: 50;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
 }
 
 .header-logo {
@@ -141,7 +142,7 @@ input, select { font-family: inherit; }
 
 .panel-title {
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.15em;
   color: var(--text-muted);
@@ -164,6 +165,7 @@ input, select { font-family: inherit; }
   background: linear-gradient(90deg, var(--gold), var(--gold-bright));
   border-radius: 999px;
   transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(200,146,42,0.45);
 }
 
 .xp-label {
@@ -187,7 +189,9 @@ input, select { font-family: inherit; }
   display: flex;
   flex-direction: column;
   gap: 2px;
+  transition: border-color 0.15s;
 }
+.stat:hover { border-color: var(--border-light); }
 
 .stat-val {
   font-family: var(--font-display);
@@ -247,8 +251,8 @@ input, select { font-family: inherit; }
   stroke-linecap: round;
   transition: stroke-dashoffset 0.8s linear;
 }
-.ring-focus { stroke: var(--gold); }
-.ring-break { stroke: var(--success); }
+.ring-focus { stroke: var(--gold); filter: drop-shadow(0 0 5px rgba(200,146,42,0.55)); }
+.ring-break { stroke: var(--success); filter: drop-shadow(0 0 5px rgba(74,158,106,0.55)); }
 
 .timer-display {
   position: absolute;
@@ -287,7 +291,8 @@ input, select { font-family: inherit; }
   border: none;
   transition: opacity 0.15s;
 }
-.ctrl-btn:hover { opacity: 0.85; }
+.ctrl-btn:hover { opacity: 0.9; }
+.ctrl-primary:hover { box-shadow: 0 0 14px rgba(200,146,42,0.25); }
 
 .ctrl-primary { background: var(--gold); color: #0e0e11; }
 .ctrl-ghost { background: var(--bg-card); color: var(--text); border: 1px solid var(--border); }
@@ -374,7 +379,7 @@ input, select { font-family: inherit; }
   border-radius: 6px;
   transition: opacity 0.15s;
 }
-.add-quest-btn:hover { opacity: 0.85; }
+.add-quest-btn:hover { opacity: 0.9; box-shadow: 0 0 16px rgba(200,146,42,0.3); }
 
 .add-quest-form {
   display: flex;
@@ -495,18 +500,35 @@ input, select { font-family: inherit; }
 
 /* ── Quest Card ── */
 .quest-card {
+  --tier-accent: transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-left: 3px solid var(--tier-accent);
   border-radius: 7px;
   padding: 10px 14px;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
-.quest-card:hover { border-color: var(--border-light); }
+.quest-card:not(.completed) { animation: cardIn 0.18s ease both; }
+.quest-card:hover {
+  border-top-color: var(--border-light);
+  border-right-color: var(--border-light);
+  border-bottom-color: var(--border-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
 .quest-card.completed { opacity: 0.45; }
+.quest-card.completed:hover { transform: none; box-shadow: none; }
+.quest-card.tier-common    { --tier-accent: rgba(136,136,136,0.45); }
+.quest-card.tier-rare      { --tier-accent: rgba(74,158,255,0.6); }
+.quest-card.tier-epic      { --tier-accent: rgba(180,79,255,0.6); }
+.quest-card.tier-legendary { --tier-accent: rgba(255,140,0,0.7); }
+.quest-card.tier-legendary:hover { box-shadow: 0 4px 16px rgba(255,140,0,0.1); }
 
 .quest-left {
   display: flex;
@@ -636,7 +658,7 @@ input, select { font-family: inherit; }
   line-height: 1.6;
 }
 
-.victory .peace-crest { animation: float 2s ease-in-out infinite; }
+.victory .peace-crest { animation: float 2s ease-in-out infinite; filter: drop-shadow(0 0 24px rgba(200,146,42,0.4)); }
 .victory .peace-title { color: var(--gold); }
 
 .show-completed-link {
@@ -673,6 +695,7 @@ input, select { font-family: inherit; }
   flex-direction: column;
   gap: 8px;
   animation: scaleIn 0.3s ease;
+  box-shadow: 0 0 60px rgba(200,146,42,0.18), inset 0 1px 0 rgba(200,146,42,0.12);
 }
 
 .level-up-label {
@@ -703,6 +726,11 @@ input, select { font-family: inherit; }
 }
 
 /* ── Animations ── */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
@@ -917,6 +945,12 @@ input, select { font-family: inherit; }
   animation: mergePop 0.18s ease;
   z-index: 2;
 }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 /* ── Responsive ── */
 @media (max-width: 700px) {
