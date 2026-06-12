@@ -3,6 +3,7 @@ import type { Quest, Tier, SortMode } from '../types'
 import { TIER_LABELS } from '../constants'
 import QuestCard from './QuestCard'
 import Game2048 from './Game2048'
+import TicTacToe from './TicTacToe'
 
 interface Props {
   todayQuests: Quest[]
@@ -86,7 +87,7 @@ export default function QuestBoard(props: Props) {
   } = props
 
   const [showCompleted, setShowCompleted] = useState(false)
-  const [showGame, setShowGame] = useState(false)
+  const [activeGame, setActiveGame] = useState<null | '2048' | 'ttt'>(null)
 
   const cardProps = (showPin: boolean) => ({
     sortMode,
@@ -107,11 +108,17 @@ export default function QuestBoard(props: Props) {
           <div className="peace-sub">Add a task to get started.</div>
           <AddQuestForm onAdd={addQuest} />
           <div className="peace-divider">— or —</div>
-          <button className="game-toggle-btn" onClick={() => setShowGame(v => !v)}>
-            {showGame ? 'Hide Game' : 'Play 2048 to pass the time'}
-          </button>
+          <div className="game-picker">
+            <button className={`game-toggle-btn ${activeGame === '2048' ? 'active' : ''}`} onClick={() => setActiveGame(g => g === '2048' ? null : '2048')}>
+              {activeGame === '2048' ? 'Hide 2048' : 'Play 2048'}
+            </button>
+            <button className={`game-toggle-btn ${activeGame === 'ttt' ? 'active' : ''}`} onClick={() => setActiveGame(g => g === 'ttt' ? null : 'ttt')}>
+              {activeGame === 'ttt' ? 'Hide Tic Tac Toe' : 'Tic Tac Toe'}
+            </button>
+          </div>
         </div>
-        {showGame && <Game2048 />}
+        {activeGame === '2048' && <Game2048 />}
+        {activeGame === 'ttt' && <TicTacToe />}
       </div>
     )
   }
@@ -135,11 +142,17 @@ export default function QuestBoard(props: Props) {
             </div>
           )}
           <div className="peace-divider">— or —</div>
-          <button className="game-toggle-btn" onClick={() => setShowGame(v => !v)}>
-            {showGame ? 'Hide Game' : 'Play 2048 while you rest'}
-          </button>
+          <div className="game-picker">
+            <button className={`game-toggle-btn ${activeGame === '2048' ? 'active' : ''}`} onClick={() => setActiveGame(g => g === '2048' ? null : '2048')}>
+              {activeGame === '2048' ? 'Hide 2048' : 'Play 2048'}
+            </button>
+            <button className={`game-toggle-btn ${activeGame === 'ttt' ? 'active' : ''}`} onClick={() => setActiveGame(g => g === 'ttt' ? null : 'ttt')}>
+              {activeGame === 'ttt' ? 'Hide Tic Tac Toe' : 'Tic Tac Toe'}
+            </button>
+          </div>
         </div>
-        {showGame && <Game2048 />}
+        {activeGame === '2048' && <Game2048 />}
+        {activeGame === 'ttt' && <TicTacToe />}
       </div>
     )
   }
